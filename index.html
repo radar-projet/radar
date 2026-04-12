@@ -3,73 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASA Radar | Projet 3APIC5</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>ASA Radar | Système de Détection Spatial IoT | Projet 3APIC5</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* === VARIABLES & RESET (THÈME CLAIR POUR LE SITE) === */
+        /* === VARIABLES & RESET (THÈME CLAIR CORPORATE) === */
         :root {
-            --bg: #f4f7f6;
-            --panel: rgba(255, 255, 255, 0.85);
-            --panel-border: rgba(0, 102, 204, 0.2);
-            --primary: #0055ff;
-            --primary-glow: rgba(0, 85, 255, 0.2);
-            --text: #1a1a1a;
-            --muted: #556066;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --bg: #fdfdfd; /* Fond presque blanc pur */
+            --panel: rgba(255, 255, 255, 0.9);
+            --panel-border: rgba(0, 85, 255, 0.15);
+            --primary: #0055ff; /* Bleu scientifique profond */
+            --primary-glow: rgba(0, 85, 255, 0.15);
+            --text: #0a0a0a; /* Texte presque noir pur */
+            --muted: #4a5a6a; /* Texte secondaire gris bleu */
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            --nav-height: 120px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
         body {
             background-color: var(--bg);
-            background-image: 
-                radial-gradient(circle at top right, rgba(0, 85, 255, 0.05), transparent 40%),
-                radial-gradient(circle at bottom left, rgba(0, 85, 255, 0.03), transparent 40%);
-            color: var(--text); font-family: 'Rajdhani', sans-serif; overflow-x: hidden;
+            color: var(--text); font-family: 'Roboto', sans-serif; overflow-x: hidden;
+            background-image: linear-gradient(135deg, rgba(0, 85, 255, 0.02) 25%, transparent 25%), 
+                              linear-gradient(225deg, rgba(0, 85, 255, 0.02) 25%, transparent 25%);
+            background-size: 30px 30px;
         }
 
-        h1, h2, h3 { font-family: 'Orbitron', sans-serif; }
+        /* === TYPOGRAPHIE GLOBALE === */
+        h1, h2 { font-family: 'Orbitron', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #000; }
+        h3 { font-family: 'Rajdhani', sans-serif; font-weight: 700; text-transform: uppercase; color: var(--primary); }
         .highlight { color: var(--primary); }
 
-        /* === NAVIGATION === */
+        /* === NAVIGATION PROFONDE === */
         nav {
-            position: fixed; top: 0; width: 100%; padding: 10px 50px; display: flex;
-            justify-content: space-between; align-items: center;
-            background: rgba(244, 247, 246, 0.9); backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--panel-border); z-index: 100;
+            position: fixed; top: 0; width: 100%; height: var(--nav-height); padding: 0 60px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(253, 253, 253, 0.95); backdrop-filter: blur(15px);
+            border-bottom: 2px solid var(--panel-border); z-index: 100;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.03);
         }
-        .nav-logo { height: 85px; } 
-        .nav-links a { color: var(--text); text-decoration: none; margin-left: 30px; font-size: 1.1rem; font-weight: 600; transition: color 0.3s; }
+        
+        /* LOGO ÉNORME ET DEVISE */
+        .nav-logo-block { display: flex; align-items: center; gap: 20px; }
+        .nav-logo { height: 110px; } 
+        .nav-motto { font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; color: var(--muted); border-left: 2px solid var(--panel-border); padding-left: 20px; text-transform: uppercase; letter-spacing: 1px; }
+
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { 
+            color: var(--text); text-decoration: none; 
+            font-size: 1.2rem; font-weight: 500; font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; 
+            position: relative;
+        }
+        .nav-links a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0; background-color: var(--primary); transition: width 0.3s; }
         .nav-links a:hover { color: var(--primary); }
+        .nav-links a:hover::after { width: 100%; }
 
-        /* === SECTIONS === */
-        section { min-height: 100vh; padding: 120px 50px 50px; display: flex; flex-direction: column; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; }
+        /* === SECTIONS PRINCIPALES === */
+        section { min-height: 100vh; padding: calc(var(--nav-height) + 50px) 60px 100px; display: flex; flex-direction: column; justify-content: center; align-items: center; max-width: 1300px; margin: 0 auto; }
 
-        /* === ACCUEIL === */
+        /* === ACCUEIL : DESIGN ÉPURÉ === */
         #accueil { text-align: center; }
-        .hero-logo { width: 450px; max-width: 100%; margin-bottom: 20px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.15)); }
-        .hero-title { font-size: 4rem; letter-spacing: 2px; margin-bottom: 10px; color: #000; }
-        .hero-subtitle { font-size: 1.5rem; color: var(--muted); margin-bottom: 40px; }
+        .hero-title { font-size: 5rem; line-height: 1.1; margin-bottom: 20px; }
+        .hero-subtitle { font-size: 1.8rem; font-weight: 300; color: var(--muted); margin-bottom: 60px; max-width: 800px; }
         .btn-launch {
             appearance: none; border: 2px solid var(--primary); border-radius: 5px;
-            padding: 15px 40px; background: rgba(0, 85, 255, 0.05); color: var(--primary);
-            font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; cursor: pointer;
-            box-shadow: 0 4px 15px var(--primary-glow); transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
+            padding: 18px 50px; background: #fff; color: var(--primary);
+            font-family: 'Orbitron', sans-serif; font-size: 1.3rem; font-weight: 700; cursor: pointer;
+            box-shadow: 0 10px 30px var(--primary-glow); transition: all 0.4s ease; text-transform: uppercase; letter-spacing: 1px;
         }
-        .btn-launch:hover { background: var(--primary); color: #fff; box-shadow: 0 8px 25px var(--primary-glow); transform: translateY(-3px); }
+        .btn-launch:hover { background: var(--primary); color: #fff; box-shadow: 0 15px 40px rgba(0, 85, 255, 0.3); transform: translateY(-5px); }
 
-        /* === PROJET === */
-        .glass-card { background: var(--panel); border: 1px solid var(--panel-border); border-radius: 15px; padding: 40px; backdrop-filter: blur(10px); margin-top: 30px; text-align: justify; font-size: 1.2rem; line-height: 1.6; box-shadow: var(--shadow); }
-        .glass-card h2 { text-align: center; margin-bottom: 20px; font-size: 2.5rem; }
+        /* === PROJET & ÉQUIPE : GRANDES CARTES GÉOMÉTRIQUES === */
+        .glass-card { background: var(--panel); border: 2px solid var(--panel-border); border-radius: 10px; padding: 60px; margin-top: 40px; box-shadow: var(--shadow); width: 100%; position: relative; }
+        .glass-card h2 { text-align: center; margin-bottom: 40px; font-size: 3rem; }
+        
+        .card-content { display: flex; flex-direction: column; gap: 30px; font-size: 1.3rem; line-height: 1.8; color: var(--text); text-align: justify; }
+        .card-content p strong { color: var(--primary); font-weight: 500; }
 
-        /* === EQUIPE === */
-        .team-grid { display: flex; gap: 30px; margin-top: 40px; flex-wrap: wrap; justify-content: center; }
-        .team-member { background: #ffffff; border: 1px solid var(--panel-border); border-radius: 10px; padding: 30px; width: 250px; text-align: center; transition: transform 0.3s, box-shadow 0.3s; box-shadow: var(--shadow); }
-        .team-member:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0, 85, 255, 0.15); }
-        .team-member h3 { font-size: 1.5rem; margin-bottom: 5px; color: var(--primary); }
-        .team-member p { color: var(--muted); font-size: 1.1rem; }
-
-        /* === MODAL RADAR (SOMBRE ORIGINAL) === */
+        /* === MODAL RADAR (SOMBRE ORIGINAL PRÉSERVÉ) === */
         #radar-modal {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: radial-gradient(circle at center 110%, rgba(0, 214, 255, 0.15), transparent 48%), linear-gradient(180deg, #06131a 0%, #02060a 60%);
@@ -95,38 +107,54 @@
 </head>
 <body>
     <nav>
-        <img src="logo.png" alt="ASA Logo" class="nav-logo" onerror="this.style.display='none'">
+        <div class="nav-logo-block">
+            <img src="logo.png" alt="ASA Logo" class="nav-logo" onerror="this.style.display='none'">
+            <p class="nav-motto">Détection.<br>Innovation.<br>Connexion.</p>
+        </div>
         <div class="nav-links">
             <a href="#accueil">Accueil</a>
             <a href="#projet">Le Projet</a>
-            <a href="#equipe">Équipe</a>
+            <a href="#equipe">A Propos</a>
         </div>
     </nav>
 
     <section id="accueil">
-        <img src="logo.png" alt="ASA Logo" class="hero-logo" onerror="this.style.display='none'">
         <h1 class="hero-title">RADAR <span class="highlight">ASA</span></h1>
-        <p class="hero-subtitle">Système de Détection Spatial IoT | Classe 3APIC5</p>
+        <p class="hero-subtitle">Système de Détection Spatial Intégré & Plateforme IoT en Temps Réel | Classe 3APIC5</p>
         <button class="btn-launch" onclick="window.openRadar()">Lancer le Radar</button>
     </section>
 
     <section id="projet">
         <div class="glass-card">
             <h2>Pourquoi ce <span class="highlight">Projet</span> ?</h2>
-            <p>
-                Dans un monde de plus en plus automatisé, la capacité d'une machine à percevoir son environnement est devenue cruciale. Le <strong>Projet ASA</strong> (Aymane, Soufiane, Ali) est la fusion entre la <strong>mécanique</strong>, l'<strong>électronique</strong> (Arduino, capteur HC-SR04), et la <strong>programmation web IoT</strong>. <br><br>
-                Grâce au Cloud, ce radar ne se contente pas d'afficher les données sur un seul ordinateur : il diffuse ses ondes en temps réel sur internet. N'importe quel appareil connecté (téléphone, tablette) devient un écran de contrôle synchronisé en direct.
-            </p>
+            <div class="card-content">
+                <p>
+                    Dans une ère où l'automatisation et l'intelligence artificielle redéfinissent notre quotidien, la capacité d'une machine à percevoir son environnement est devenue un pilier technologique crucial. Nous avons voulu explorer cette frontière.
+                </p>
+                <p>
+                    Nos motivations profonds étaient doubles : premièrement, <strong>relever un défi d'ingénierie complexe</strong> en unifiant la <strong>mécanique</strong> (Servomoteur), l'<strong>électronique</strong> (Arduino, capteur HC-SR04), et la <strong>programmation web de pointe</strong>. Deuxièmement, nous souhaitions concevoir un outil tangible démontrant comment le web en temps réel peut étendre les capacités d'un capteur physique. Nous voulions aller au-delà de la salle de classe, pour innover.
+                </p>
+                <p>
+                    Le <strong>Projet ASA</strong> n'est donc pas une simple démonstration technique. C'est une plateforme IoT complète capable de capturer des données physiques, de les traiter instantanément et de les diffuser sur le Cloud Firebase. Cette architecture permet à n'importe quel appareil connecté de devenir un écran de contrôle synchronisé, posant les bases de systèmes de sécurité et de navigation autonomes de demain.
+                </p>
+            </div>
         </div>
     </section>
 
     <section id="equipe">
-        <h2 style="font-size: 3rem; margin-bottom: 20px;">L'Équipe <span class="highlight">ASA</span></h2>
-        <p style="font-size: 1.2rem; color: var(--muted);">Classe 3APIC5</p>
-        <div class="team-grid">
-            <div class="team-member"><h3>Aymane Banacer</h3><p>Développeur & Concepteur</p></div>
-            <div class="team-member"><h3>Soufiane Elghanaoui</h3><p>Ingénieur Électronique</p></div>
-            <div class="team-member"><h3>Ali Elkadir</h3><p>Spécialiste Intégration</p></div>
+        <div class="glass-card">
+            <h2>L'Équipe <span class="highlight">ASA</span></h2>
+            <div class="card-content" style="text-align: center;">
+                <p>
+                    Le Projet ASA est le fruit d'une <strong>collaboration intense et passionnée</strong> entre des esprits curieux et déterminés. Sous la supervision éclairée de notre professeur, <strong>Mr. Annouar Mouhassine</strong>, chaque membre de l'équipe a investi son énergie, son talent et son dévouement.
+                </p>
+                <p style="font-size: 2rem; font-family: 'orbitron', sans-serif; color: var(--primary); margin: 30px 0;">
+                    Aymane Banacer | Soufiane Elghanaoui | Ali Elkadir
+                </p>
+                <p>
+                    En unissant nos forces et en repoussant les limites de l'ingénierie au niveau collégial, nous avons travaillé de concert pour concevoir, coder, assembler et tester chaque composant. Ce radar est la preuve tangible de la puissance du travail d'équipe et d'une vision technologique commune.
+                </p>
+            </div>
         </div>
     </section>
 
