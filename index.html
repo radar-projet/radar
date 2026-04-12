@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>ASA Radar | Système de Détection IoT Arduino Temps Réel</title>
+    <title>ASA Radar | Système de Détection IoT Arduino</title>
     <meta name="description" content="Découvrez le Projet ASA : un radar Arduino innovant avec capteur HC-SR04. Visualisation spatiale IoT en temps réel développée par Aymane, Soufiane et Ali.">
-    <meta name="keywords" content="Radar Arduino, Radar ASA, Projet ASA, HC-SR04, IoT, Détection ultrason, Arduino Radar Web">
+    <meta name="keywords" content="Radar Arduino, Radar ASA, Projet ASA, HC-SR04, IoT, Détection ultrason">
     
     <link rel="icon" href="logo.png" type="image/png">
 
@@ -19,58 +19,58 @@
             --panel-border: rgba(0, 85, 255, 0.15);
             --primary: #0055ff; 
             --text: #111; 
-            --muted: #4a5a6a; 
             --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            --nav-height: 70px;
+            --nav-height: 80px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; }
-        h1, h2 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+        h1, h2 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; }
         .highlight { color: var(--primary); }
 
-        /* BARRE DE NAVIGATION (LOGO ROND + TITRE) */
+        /* NAVIGATION AVEC LOGO COMPLET */
         nav {
             position: fixed; top: 0; width: 100%; height: var(--nav-height); padding: 0 30px;
             display: flex; justify-content: space-between; align-items: center;
             background: rgba(253, 253, 253, 0.98); border-bottom: 1px solid var(--panel-border); z-index: 100;
-            backdrop-filter: blur(10px);
         }
-        .nav-logo-block { display: flex; align-items: center; gap: 12px; }
-        .nav-logo { height: 45px; width: 45px; border-radius: 50%; object-fit: cover; } /* Logo rond */
-        .nav-title { font-family: 'Orbitron', sans-serif; font-size: 1.15rem; font-weight: 700; color: #000; }
+        .nav-logo-block { display: flex; align-items: center; }
+        .nav-logo-img { height: 60px; width: auto; } /* Logo complet dans la barre */
 
         .nav-links { display: flex; gap: 20px; }
-        .nav-links a { color: var(--text); text-decoration: none; font-weight: 600; text-transform: uppercase; font-family: 'Rajdhani'; }
+        .nav-links a { color: var(--text); text-decoration: none; font-weight: 600; text-transform: uppercase; font-family: 'Rajdhani'; font-size: 1.1rem; }
 
-        /* CONTENU DU SITE */
-        section { padding: calc(var(--nav-height) + 40px) 20px 40px; max-width: 1000px; margin: 0 auto; text-align: center; }
-        .glass-card { background: var(--panel); border: 1px solid var(--panel-border); border-radius: 12px; padding: 40px; box-shadow: var(--shadow); }
+        /* SECTIONS */
+        section { padding: calc(var(--nav-height) + 50px) 30px 40px; max-width: 1000px; margin: 0 auto; text-align: center; }
+        .glass-card { background: var(--panel); border: 1px solid var(--panel-border); border-radius: 12px; padding: 40px; box-shadow: var(--shadow); width: 100%; }
         
-        /* LOGO COMPLET DANS LE PROJET */
-        .full-logo-img {
-            max-width: 250px; 
-            height: auto;
-            margin-bottom: 25px;
-        }
+        .full-logo-body { max-width: 280px; height: auto; margin-bottom: 25px; }
 
         .btn-launch {
-            border: 2px solid var(--primary); padding: 12px 35px; background: #fff; color: var(--primary);
-            font-family: 'Orbitron'; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 30px;
+            border: 2px solid var(--primary); padding: 15px 40px; background: #fff; color: var(--primary);
+            font-family: 'Orbitron'; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1.2rem;
         }
-        .btn-launch:hover { background: var(--primary); color: #fff; }
+        .btn-launch:hover { background: var(--primary); color: #fff; transform: scale(1.05); }
 
-        /* MODAL RADAR */
-        #radar-modal { position: fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:1000; display:none; }
-        #radar-modal.active { display: flex; justify-content: center; align-items: center; }
+        /* RADAR MODAL (CORRECTION ÉCRAN NOIR) */
+        #radar-modal { 
+            position: fixed; top:0; left:0; width:100%; height:100%; 
+            background: radial-gradient(circle at center, #06131a 0%, #000 100%); 
+            z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center;
+        }
+        #radar-modal.active { display: flex; }
+        #radarCanvas { width: 100%; height: 80%; }
+        .btn-close { position: absolute; top: 20px; right: 30px; color: #00d6ff; font-size: 2.5rem; background: none; border: none; cursor: pointer; z-index: 1010; }
+        
+        .radar-controls { position: absolute; bottom: 30px; display: flex; gap: 15px; align-items: center; }
+        .btn-serial { background: #00d6ff; border: none; padding: 10px 20px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; border-radius: 5px; }
     </style>
 </head>
 <body>
 
     <nav>
         <div class="nav-logo-block">
-            <img src="logo.png" alt="Icon" class="nav-logo">
-            <span class="nav-title">ASA <span class="highlight">RADAR</span></span>
+            <img src="logo-complet.png" alt="ASA RADAR" class="nav-logo-img">
         </div>
         <div class="nav-links">
             <a href="#accueil">Accueil</a>
@@ -79,26 +79,116 @@
     </nav>
 
     <section id="accueil">
-        <h1 style="font-size: 2.5rem;">SYSTÈME DE DÉTECTION <span class="highlight">IOT</span></h1>
-        <button class="btn-launch" onclick="document.getElementById('radar-modal').classList.add('active')">Lancer le Radar</button>
+        <h1 style="font-size: 3.5rem; margin-bottom: 30px; line-height: 1.2;">SYSTÈME DE DÉTECTION <br><span class="highlight">IOT LIVE</span></h1>
+        <button class="btn-launch" onclick="openRadar()">Lancer le Radar</button>
     </section>
 
     <section id="projet">
         <div class="glass-card">
-            <img src="logo-complet.png" alt="Logo Complet ASA" class="full-logo-img">
+            <img src="logo-complet.png" alt="Logo Projet ASA" class="full-logo-body">
             
             <h2>À propos du Projet</h2>
-            <p style="margin-top: 20px; line-height: 1.6;">
-                Le <strong>Projet ASA</strong> utilise un capteur HC-SR04 et Arduino pour une détection spatiale précise.
-                Les données sont envoyées vers <strong>Firebase</strong> pour une visualisation web immédiate.
+            <p style="margin-top: 25px; line-height: 1.8; text-align: justify; font-size: 1.1rem; color: var(--muted);">
+                Le <strong>Projet ASA</strong> est né de la collaboration entre <strong>Aymane, Soufiane et Ali</strong>. 
+                Ce système utilise un capteur ultrasonique HC-SR04 pour cartographier l'environnement en temps réel. 
+                Grâce à l'intégration de <strong>Firebase</strong>, les données sont accessibles en direct depuis n'importe quel navigateur web dans le monde.
             </p>
         </div>
     </section>
 
     <div id="radar-modal">
-        <button onclick="this.parentElement.classList.remove('active')" style="position:absolute; top:20px; right:30px; color:white; background:none; border:none; font-size:2rem; cursor:pointer;">✕</button>
-        <h2 style="color:white;">Interface Radar en charge...</h2>
+        <button class="btn-close" onclick="closeRadar()">✕</button>
+        <canvas id="radarCanvas"></canvas>
+        <div class="radar-controls">
+            <button class="btn-serial" onclick="connectSerial()">Connecter Arduino</button>
+            <span id="status" style="color: #00d6ff; font-family: 'Orbitron';">Mode Spectateur</span>
+        </div>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-database.js";
+
+        const firebaseConfig = {
+            databaseURL: "https://asa-radar-default-rtdb.europe-west1.firebasedatabase.app"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const canvas = document.getElementById("radarCanvas");
+        const ctx = canvas.getContext("2d");
+        let state = { angle: 0, distance: 0 };
+        let isMaster = false;
+
+        window.openRadar = () => { document.getElementById('radar-modal').classList.add('active'); resize(); };
+        window.closeRadar = () => { document.getElementById('radar-modal').classList.remove('active'); };
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight * 0.8;
+        }
+
+        // Écouter les données Live du Cloud
+        onValue(ref(db, 'asa_radar/data'), (snapshot) => {
+            if (!isMaster) {
+                const data = snapshot.val();
+                if (data) { state.angle = data.a; state.distance = data.d; }
+            }
+        });
+
+        function draw() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            const cx = canvas.width / 2;
+            const cy = canvas.height * 0.9;
+            const r = canvas.height * 0.8;
+
+            ctx.strokeStyle = "#00d6ff";
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, Math.PI, 2 * Math.PI);
+            ctx.stroke();
+
+            const rad = (-state.angle * Math.PI) / 180;
+            ctx.strokeStyle = "#00d6ff";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(cx + r * Math.cos(rad), cy + r * Math.sin(rad));
+            ctx.stroke();
+
+            if (state.distance < 40) {
+                ctx.fillStyle = "red";
+                const d = (state.distance / 40) * r;
+                ctx.beginPath();
+                ctx.arc(cx + d * Math.cos(rad), cy + d * Math.sin(rad), 10, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            requestAnimationFrame(draw);
+        }
+
+        window.connectSerial = async () => {
+            const port = await navigator.serial.requestPort();
+            await port.open({ baudRate: 9600 });
+            isMaster = true;
+            document.getElementById("status").textContent = "MAÎTRE CONNECTÉ";
+            const reader = port.readable.getReader();
+            let buffer = "";
+            while (true) {
+                const { value, done } = await reader.read();
+                buffer += new TextDecoder().decode(value);
+                if (buffer.includes(".")) {
+                    const parts = buffer.split(".")[0].split(",");
+                    state.angle = parseInt(parts[0]);
+                    state.distance = parseInt(parts[1]);
+                    set(ref(db, 'asa_radar/data'), { a: state.angle, d: state.distance });
+                    buffer = "";
+                }
+            }
+        };
+
+        window.addEventListener('resize', resize);
+        draw();
+    </script>
 </body>
 </html>
