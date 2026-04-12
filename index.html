@@ -4,311 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>ASA Radar | Système de Détection IoT Arduino Temps Réel</title>
+    <title>ASA Radar | Système de Détection IoT Arduino</title>
     <meta name="description" content="Découvrez le Projet ASA : un radar Arduino innovant avec capteur HC-SR04. Visualisation spatiale IoT en temps réel développée par Aymane, Soufiane et Ali.">
-    <meta name="keywords" content="Radar Arduino, Radar ASA, Projet ASA, HC-SR04, IoT, Détection ultrason, Arduino Radar Web">
+    <meta name="keywords" content="Radar Arduino, Radar ASA, Projet ASA, HC-SR04, IoT, Détection ultrason">
     
     <link rel="icon" href="logo.png" type="image/png">
 
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <style>
-        /* === VARIABLES & RESET === */
         :root {
             --bg: #fdfdfd; 
             --panel: rgba(255, 255, 255, 0.95);
             --panel-border: rgba(0, 85, 255, 0.15);
             --primary: #0055ff; 
-            --primary-glow: rgba(0, 85, 255, 0.15);
             --text: #111; 
             --muted: #4a5a6a; 
             --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            --nav-height: 70px; /* Barre fine */
+            --nav-height: 70px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text); font-family: 'Roboto', sans-serif; overflow-x: hidden;
-            background-image: linear-gradient(135deg, rgba(0, 85, 255, 0.02) 25%, transparent 25%), 
-                              linear-gradient(225deg, rgba(0, 85, 255, 0.02) 25%, transparent 25%);
-            background-size: 20px 20px;
-        }
-
-        h1, h2 { font-family: 'Orbitron', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #000; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; }
+        h1, h2 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; }
         .highlight { color: var(--primary); }
 
-        /* === NAVIGATION COMPACTE AVEC LOGO === */
+        /* NAVIGATION AVEC LOGO ROND */
         nav {
             position: fixed; top: 0; width: 100%; height: var(--nav-height); padding: 0 30px;
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(253, 253, 253, 0.98); backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--panel-border); z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            background: rgba(253, 253, 253, 0.98); border-bottom: 1px solid var(--panel-border); z-index: 100;
         }
-        
         .nav-logo-block { display: flex; align-items: center; gap: 12px; }
-        
-        .nav-logo { 
-            height: 45px; 
-            width: 45px; 
-            border-radius: 50%; /* Rend le logo parfaitement rond */
-            object-fit: cover;
-            border: 1px solid var(--panel-border);
-        }
-
-        .nav-motto { 
-            font-family: 'Rajdhani', sans-serif; 
-            font-size: 0.9rem; 
-            color: var(--muted); 
-            border-left: 1px solid var(--panel-border); 
-            padding-left: 12px; 
-            text-transform: uppercase; 
-            font-weight: 600;
-            line-height: 1.2;
-        }
+        .nav-logo { height: 45px; width: 45px; border-radius: 50%; object-fit: cover; }
+        .nav-title { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; color: #000; }
 
         .nav-links { display: flex; gap: 20px; }
-        .nav-links a { 
-            color: var(--text); text-decoration: none; 
-            font-size: 1rem; font-weight: 600; font-family: 'Rajdhani', sans-serif;
-            text-transform: uppercase; transition: color 0.3s ease; 
-        }
-        .nav-links a:hover { color: var(--primary); }
+        .nav-links a { color: var(--text); text-decoration: none; font-weight: 600; text-transform: uppercase; font-family: 'Rajdhani'; }
 
-        /* === SECTIONS RESSERRÉES (ZÉRO ESPACE PERDU) === */
-        section { 
-            padding: calc(var(--nav-height) + 30px) 30px 30px; 
-            display: flex; flex-direction: column; align-items: center; 
-            max-width: 1000px; margin: 0 auto; 
-        }
-        #projet, #equipe { padding-top: 20px; }
-
-        /* === ACCUEIL === */
-        #accueil { text-align: center; padding-top: calc(var(--nav-height) + 50px); padding-bottom: 30px;}
-        .hero-title { font-size: 3rem; margin-bottom: 5px; }
-        .hero-subtitle { font-size: 1.2rem; color: var(--muted); margin-bottom: 25px; font-weight: 400;}
-        .btn-launch {
-            appearance: none; border: 2px solid var(--primary); border-radius: 4px;
-            padding: 10px 30px; background: #fff; color: var(--primary);
-            font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer;
-            box-shadow: 0 5px 15px var(--primary-glow); transition: all 0.3s ease; text-transform: uppercase;
-        }
-        .btn-launch:hover { background: var(--primary); color: #fff; transform: translateY(-2px); }
-
-        /* === CARTES CONTENU === */
-        .glass-card { background: var(--panel); border: 1px solid var(--panel-border); border-radius: 8px; padding: 30px; box-shadow: var(--shadow); width: 100%; }
-        .glass-card h2 { text-align: center; margin-bottom: 20px; font-size: 2rem; }
+        /* SECTIONS */
+        section { padding: calc(var(--nav-height) + 40px) 30px 40px; max-width: 1000px; margin: 0 auto; text-align: center; }
+        .glass-card { background: var(--panel); border: 1px solid var(--panel-border); border-radius: 12px; padding: 40px; box-shadow: var(--shadow); width: 100%; }
         
-        .card-content { display: flex; flex-direction: column; gap: 12px; font-size: 1.05rem; line-height: 1.5; text-align: justify; }
-        .card-content p strong { color: var(--primary); }
-
-        /* === MODAL RADAR (L'APPLICATION) === */
-        #radar-modal {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at center 110%, rgba(0, 214, 255, 0.15), transparent 48%), linear-gradient(180deg, #06131a 0%, #02060a 60%);
-            z-index: 1000; display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
+        /* LOGO COMPLET DANS LE SITE */
+        .full-logo-img {
+            max-width: 300px; /* Taille du logo avec texte dans le site */
+            height: auto;
+            margin-bottom: 25px;
+            border-radius: 8px;
         }
-        #radar-modal.active { opacity: 1; pointer-events: all; }
-        .btn-close { position: absolute; top: 20px; right: 30px; background: none; border: none; color: #00d6ff; font-size: 2.5rem; cursor: pointer; z-index: 1010; font-family: 'Orbitron', sans-serif; }
-        #radarCanvas { display: block; width: 100vw; height: 100vh; }
-        .radar-panel { position: absolute; top: 20px; left: 20px; z-index: 1005; min-width: 250px; padding: 14px; border: 1px solid rgba(0, 208, 255, 0.35); border-radius: 14px; background: rgba(3, 18, 24, 0.78); backdrop-filter: blur(8px); }
-        .radar-panel h1 { font-family: Arial, sans-serif; margin: 0 0 8px; font-size: 18px; color: #d9f9ff; }
-        .radar-panel p { font-family: Arial, sans-serif; margin: 0 0 12px; color: #79bac5; font-size: 13px; }
-        .actions { display: flex; align-items: center; gap: 10px; }
-        .btn-connect { border: 0; border-radius: 999px; padding: 11px 18px; background: linear-gradient(180deg, #1fe3ff 0%, #00a7cb 100%); color: #001219; font-size: 15px; font-weight: 700; cursor: pointer; }
-        .status { font-size: 12px; color: #79bac5; font-family: Arial, sans-serif; }
-        .status.spectator { color: #ff9e1a; font-weight: bold; }
+
+        .btn-launch {
+            border: 2px solid var(--primary); padding: 12px 35px; background: #fff; color: var(--primary);
+            font-family: 'Orbitron'; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-launch:hover { background: var(--primary); color: #fff; }
+
+        /* RADAR MODAL (Invisible par défaut) */
+        #radar-modal { position: fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:1000; display:none; }
+        #radar-modal.active { display: flex; justify-content: center; align-items: center; }
+        #radarCanvas { width: 100%; height: 100%; }
+        .btn-close { position: absolute; top: 20px; right: 30px; color: #00d6ff; font-size: 2rem; background: none; border: none; cursor: pointer; }
     </style>
 </head>
 <body>
+
     <nav>
         <div class="nav-logo-block">
-            <img src="logo.png" alt="ASA Logo" class="nav-logo" onerror="this.style.display='none'">
-            <p class="nav-motto">Radar ASA<br>Arduino IoT</p>
+            <img src="logo.png" alt="ASA" class="nav-logo">
+            <span class="nav-title">ASA <span class="highlight">RADAR</span></span>
         </div>
         <div class="nav-links">
             <a href="#accueil">Accueil</a>
             <a href="#projet">Projet</a>
-            <a href="#equipe">Équipe</a>
         </div>
     </nav>
 
     <section id="accueil">
-        <h1 class="hero-title">Radar <span class="highlight">ASA</span> Arduino</h1>
-        <p class="hero-subtitle">Système de Détection Spatial Intégré & Plateforme IoT en Temps Réel</p>
-        <button class="btn-launch" onclick="window.openRadar()">Lancer le Radar</button>
+        <h1 style="font-size: 3rem; margin-bottom: 20px;">Système de Détection <span class="highlight">IoT</span></h1>
+        <button class="btn-launch" onclick="document.getElementById('radar-modal').classList.add('active')">Lancer le Radar</button>
     </section>
 
     <section id="projet">
         <div class="glass-card">
-            <h2>Le Projet <span class="highlight">ASA</span></h2>
-            <div class="card-content">
-                <p>Le <strong>Projet ASA</strong> est une plateforme IoT complète. Elle capture des données physiques via un capteur ultrason <strong>HC-SR04</strong>, les traite instantanément avec une carte <strong>Arduino</strong> et les diffuse sur le Cloud via Firebase.</p>
-                <p>Notre objectif : démontrer comment le web en temps réel peut étendre les capacités d'un capteur physique pour créer une interface de surveillance professionnelle accessible partout.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="equipe">
-        <div class="glass-card">
-            <h2>L'Équipe <span class="highlight">ASA</span></h2>
-            <div class="card-content" style="text-align: center;">
-                <p>Sous la supervision de <strong>Mr. Annouar Mouhassine</strong> :</p>
-                <p style="font-size: 1.4rem; font-family: 'Orbitron', sans-serif; color: var(--primary); margin: 10px 0;">
-                    Aymane Banacer | Soufiane Elghanaoui | Ali Elkadir
-                </p>
-                <p>Une collaboration intense entre électronique, design et développement web.</p>
-            </div>
+            <img src="logo-complet.png" alt="Logo Complet ASA Radar" class="full-logo-img">
+            
+            <h2>À propos du Projet</h2>
+            <p style="margin-top: 20px; line-height: 1.6; text-align: justify;">
+                Le <strong>Projet ASA</strong> est né de la collaboration entre Aymane, Soufiane et Ali. 
+                Ce système utilise un capteur ultrasonique pour cartographier l'environnement en temps réel. 
+                Grâce à l'intégration de Firebase, les données sont accessibles depuis n'importe quel navigateur web dans le monde.
+            </p>
         </div>
     </section>
 
     <div id="radar-modal">
-        <button class="btn-close" onclick="window.closeRadar()">&#10006;</button>
-        <aside class="radar-panel">
-            <h1>ASA RADAR - LIVE</h1>
-            <p>Connectez l'Arduino pour piloter ou observez en direct.</p>
-            <div class="actions">
-                <button id="connectBtn" class="btn-connect" type="button" onclick="window.connectSerial()">Connecter Arduino</button>
-                <span id="status" class="status spectator">Spectateur Live</span>
-            </div>
-        </aside>
+        <button class="btn-close" onclick="this.parentElement.classList.remove('active')">✕</button>
         <canvas id="radarCanvas"></canvas>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDp_pzkFmGEEpN2N7lUwVewoU6PdGAzAlk",
-            authDomain: "asa-radar.firebaseapp.com",
-            databaseURL: "https://asa-radar-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "asa-radar",
-            storageBucket: "asa-radar.firebasestorage.app",
-            messagingSenderId: "292289504693",
-            appId: "1:292289504693:web:bb819999feab1724f5a5fc"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        let isMaster = false; 
-        let lastSendTime = 0; 
-        const state = { angle: 0, distance: 0, buffer: "", port: null, reader: null, maxDistanceCm: 40 };
-        
-        const canvas = document.getElementById("radarCanvas");
-        const ctx = canvas.getContext("2d");
-
-        // Synchronisation Cloud
-        onValue(ref(db, 'asa_radar/data'), (snapshot) => {
-            if (!isMaster) { 
-                const data = snapshot.val();
-                if (data) { state.angle = data.a; state.distance = data.d; }
-            }
-        });
-
-        window.openRadar = () => {
-            document.getElementById('radar-modal').classList.add('active');
-            document.body.style.overflow = 'hidden'; 
-            resizeCanvas(); 
-        };
-        window.closeRadar = () => {
-            document.getElementById('radar-modal').classList.remove('active');
-            document.body.style.overflow = 'auto'; 
-        };
-
-        function resizeCanvas() {
-            const dpr = window.devicePixelRatio || 1;
-            canvas.width = Math.floor(window.innerWidth * dpr);
-            canvas.height = Math.floor(window.innerHeight * dpr);
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        }
-
-        function toRadians(angle) { return (-angle * Math.PI) / 180; }
-
-        function render() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
-            ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight * 0.9;
-            const radius = window.innerWidth * 0.4;
-
-            ctx.save();
-            ctx.translate(centerX, centerY);
-
-            // Cercles
-            ctx.strokeStyle = "rgba(0, 214, 255, 0.5)";
-            [1, 0.75, 0.5, 0.25].forEach(f => {
-                ctx.beginPath(); ctx.arc(0, 0, radius * f, Math.PI, Math.PI * 2); ctx.stroke();
-            });
-
-            // Ligne balayage
-            const rad = toRadians(state.angle);
-            ctx.strokeStyle = "#00d6ff"; ctx.lineWidth = 3;
-            ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(radius * Math.cos(rad), radius * Math.sin(rad)); ctx.stroke();
-
-            // Cible
-            if (state.distance < state.maxDistanceCm) {
-                ctx.strokeStyle = "#ff9e1a"; ctx.lineWidth = 6;
-                const dRad = (state.distance / state.maxDistanceCm) * radius;
-                ctx.beginPath();
-                ctx.moveTo(dRad * Math.cos(rad), dRad * Math.sin(rad));
-                ctx.lineTo(radius * Math.cos(rad), radius * Math.sin(rad));
-                ctx.stroke();
-            }
-
-            ctx.restore();
-
-            // HUD
-            ctx.fillStyle = "#00d6ff";
-            ctx.font = "20px Orbitron";
-            ctx.fillText(`ANGLE: ${state.angle}°`, 20, window.innerHeight - 30);
-            ctx.fillText(`DIST: ${state.distance} cm`, window.innerWidth - 180, window.innerHeight - 30);
-
-            requestAnimationFrame(render);
-        }
-
-        window.connectSerial = async () => {
-            try {
-                state.port = await navigator.serial.requestPort();
-                await state.port.open({ baudRate: 9600 });
-                isMaster = true;
-                document.getElementById("status").textContent = "MAÎTRE CONNECTÉ";
-                document.getElementById("status").style.color = "#7bf2ae";
-                document.getElementById("connectBtn").style.display = "none";
-
-                const decoder = new TextDecoderStream();
-                state.port.readable.pipeTo(decoder.writable);
-                state.reader = decoder.readable.getReader();
-
-                while (true) {
-                    const { value, done } = await state.reader.read();
-                    if (done) break;
-                    state.buffer += value;
-                    while (state.buffer.includes(".")) {
-                        const frame = state.buffer.slice(0, state.buffer.indexOf("."));
-                        state.buffer = state.buffer.slice(state.buffer.indexOf(".") + 1);
-                        const parts = frame.split(",");
-                        if (parts.length === 2) {
-                            state.angle = parseInt(parts[0]);
-                            state.distance = parseInt(parts[1]);
-                            if (Date.now() - lastSendTime > 40) {
-                                set(ref(db, 'asa_radar/data'), { a: state.angle, d: state.distance });
-                                lastSendTime = Date.now();
-                            }
-                        }
-                    }
-                }
-            } catch (e) { alert("Erreur de connexion série."); }
-        };
-
-        window.addEventListener("resize", resizeCanvas);
-        resizeCanvas();
-        requestAnimationFrame(render);
-    </script>
 </body>
 </html>
